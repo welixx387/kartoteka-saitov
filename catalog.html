@@ -1,0 +1,850 @@
+<title>Картотека сайтов</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #ece9e0;
+    --surface: #fbfaf6;
+    --surface-2: #f1efe6;
+    --ink: #23241f;
+    --ink-muted: #746f5c;
+    --border: #d6d1bf;
+    --accent: #a2362b;
+    --accent-ink: #fbfaf6;
+    --shadow: 0 1px 2px rgba(35,36,31,0.07), 0 6px 16px rgba(35,36,31,0.06);
+    --danger: #a2362b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17181a;
+      --surface: #201f1c;
+      --surface-2: #262521;
+      --ink: #ece7da;
+      --ink-muted: #a19c8c;
+      --border: #3a3833;
+      --accent: #e2664a;
+      --accent-ink: #17181a;
+      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 10px 24px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #17181a;
+    --surface: #201f1c;
+    --surface-2: #262521;
+    --ink: #ece7da;
+    --ink-muted: #a19c8c;
+    --border: #3a3833;
+    --accent: #e2664a;
+    --accent-ink: #17181a;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 10px 24px rgba(0,0,0,0.35);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Work Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  button { font-family: inherit; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  [hidden] { display: none !important; }
+
+  /* ---------- Gate ---------- */
+  #gate {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .gate-card {
+    width: min(360px, 100%);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+    padding: 36px 32px 32px;
+    text-align: center;
+  }
+  .gate-tab {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 3px 10px;
+    margin-bottom: 20px;
+  }
+  .gate-card h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 6px;
+    text-wrap: balance;
+  }
+  .gate-card p {
+    margin: 0 0 24px;
+    color: var(--ink-muted);
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  #gate-form { display: flex; flex-direction: column; gap: 12px; }
+  .code-input {
+    width: 100%;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    text-align: center;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--surface-2);
+    color: var(--ink);
+  }
+  .code-input:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .gate-submit {
+    padding: 12px 14px;
+    border: none;
+    border-radius: 3px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 600;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+  }
+  .gate-submit:hover { filter: brightness(1.08); }
+  .gate-submit:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .gate-error {
+    color: var(--danger);
+    font-size: 0.82rem;
+    min-height: 1.2em;
+    margin: 0;
+  }
+  @keyframes shake {
+    10%, 90% { transform: translateX(-1px); }
+    20%, 80% { transform: translateX(2px); }
+    30%, 50%, 70% { transform: translateX(-4px); }
+    40%, 60% { transform: translateX(4px); }
+  }
+  .gate-card.shake { animation: shake 0.4s; }
+  @media (prefers-reduced-motion: reduce) {
+    .gate-card.shake { animation: none; }
+  }
+
+  /* ---------- Catalog shell ---------- */
+  #catalog {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 28px 24px 100px;
+  }
+  header.top {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  header.top h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: clamp(1.7rem, 1.3rem + 1.6vw, 2.3rem);
+    font-weight: 600;
+    margin: 0 0 4px;
+    text-wrap: balance;
+  }
+  .top-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .lock-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 8px 12px;
+    color: var(--ink-muted);
+    font-size: 0.78rem;
+    cursor: pointer;
+  }
+  .lock-btn:hover { color: var(--ink); border-color: var(--ink-muted); }
+  .lock-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .sync-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.74rem;
+    color: var(--ink-muted);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 8px 12px;
+    margin-bottom: 20px;
+  }
+
+  /* ---------- Grid & cards ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .card-photo {
+    aspect-ratio: 4 / 3;
+    background: var(--surface-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .card-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .card-photo svg { color: var(--border); width: 40px; height: 40px; }
+  .card-body {
+    position: relative;
+    padding: 14px 14px 16px 22px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .card-body::before {
+    content: '';
+    position: absolute;
+    left: 9px;
+    top: 4px;
+    bottom: 4px;
+    width: 1px;
+    background: var(--accent);
+    opacity: 0.4;
+  }
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.02em;
+  }
+  .card-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.08rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.25;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+  .card-url {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.76rem;
+    color: var(--accent);
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+  }
+  .card-url:hover { text-decoration: underline; }
+  .card-delete {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(23,24,26,0.55);
+    color: #fff;
+    font-size: 0.9rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  .card:hover .card-delete, .card-delete:focus-visible { opacity: 1; }
+  .card-delete:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- Empty state ---------- */
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    border: 1px dashed var(--border);
+    border-radius: 4px;
+    color: var(--ink-muted);
+  }
+  .empty h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.3rem;
+    color: var(--ink);
+    margin: 0 0 8px;
+    font-weight: 600;
+  }
+  .empty p { margin: 0 0 20px; font-size: 0.9rem; }
+
+  /* ---------- FAB ---------- */
+  .fab {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    border: none;
+    font-size: 1.6rem;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .fab:hover { filter: brightness(1.08); }
+  .fab:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+  .empty-add {
+    padding: 10px 18px;
+    border-radius: 3px;
+    border: none;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+  .empty-add:hover { filter: brightness(1.08); }
+
+  /* ---------- Modal ---------- */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(23,24,26,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 10;
+  }
+  .modal {
+    width: min(420px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: var(--surface);
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+    padding: 24px;
+  }
+  .modal h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.25rem;
+    margin: 0 0 18px;
+    font-weight: 600;
+  }
+  .field { margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; }
+  .field label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--ink-muted);
+  }
+  .field input[type="text"], .field input[type="url"] {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--surface-2);
+    color: var(--ink);
+    font-size: 0.92rem;
+    font-family: inherit;
+  }
+  .field input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .file-drop {
+    border: 1px dashed var(--border);
+    border-radius: 3px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface-2);
+  }
+  .file-drop input[type="file"] { font-size: 0.8rem; max-width: 100%; }
+  .file-preview {
+    width: 48px;
+    height: 48px;
+    border-radius: 3px;
+    object-fit: cover;
+    display: none;
+    flex-shrink: 0;
+  }
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .btn-secondary {
+    padding: 10px 16px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--ink);
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+  .btn-secondary:hover { border-color: var(--ink-muted); }
+  .btn-primary {
+    padding: 10px 16px;
+    border-radius: 3px;
+    border: none;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-primary:disabled { opacity: 0.6; cursor: default; }
+  .form-error {
+    color: var(--danger);
+    font-size: 0.8rem;
+    margin: -6px 0 12px;
+    min-height: 1em;
+  }
+</style>
+
+<div id="gate">
+  <div class="gate-card" id="gate-card">
+    <span class="gate-tab">Доступ ограничен</span>
+    <h1>Картотека сайтов</h1>
+    <p>Введите код доступа, чтобы открыть личный каталог.</p>
+    <form id="gate-form" autocomplete="off">
+      <input type="password" class="code-input" id="gate-input" placeholder="••••••••" autocomplete="off" inputmode="text" required />
+      <p class="gate-error" id="gate-error"></p>
+      <button type="submit" class="gate-submit">Открыть картотеку</button>
+    </form>
+  </div>
+</div>
+
+<div id="catalog" hidden>
+  <header class="top">
+    <div>
+      <h1>Картотека сайтов</h1>
+      <div class="top-sub" id="count-label">Записей: 0</div>
+    </div>
+    <button class="lock-btn" id="lock-btn" type="button">🔒 Закрыть картотеку</button>
+  </header>
+
+  <p class="sync-note" id="sync-note" hidden></p>
+
+  <div id="grid" class="grid" hidden></div>
+  <div id="empty" class="empty" hidden>
+    <h2>Картотека пуста</h2>
+    <p>Добавьте первую ссылку на свой сайт — с фотографией или без.</p>
+    <button class="empty-add" id="empty-add-btn" type="button">Добавить сайт</button>
+  </div>
+
+  <button class="fab" id="fab" type="button" aria-label="Добавить сайт" title="Добавить сайт">+</button>
+</div>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="modal">
+    <h2>Новая запись</h2>
+    <form id="add-form">
+      <div class="field">
+        <label for="f-url">Ссылка на сайт</label>
+        <input type="url" id="f-url" placeholder="https://example.com" required />
+      </div>
+      <div class="field">
+        <label for="f-title">Название (необязательно)</label>
+        <input type="text" id="f-title" placeholder="Например, Мой блог" />
+      </div>
+      <div class="field">
+        <label for="f-photo">Фотография (необязательно)</label>
+        <div class="file-drop">
+          <img class="file-preview" id="f-preview" alt="" />
+          <input type="file" id="f-photo" accept="image/*" />
+        </div>
+      </div>
+      <p class="form-error" id="form-error"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="cancel-btn">Отмена</button>
+        <button type="submit" class="btn-primary" id="submit-btn">Добавить в картотеку</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var PASSCODE = 'shamil20';
+  var els = {
+    gate: document.getElementById('gate'),
+    gateCard: document.getElementById('gate-card'),
+    gateForm: document.getElementById('gate-form'),
+    gateInput: document.getElementById('gate-input'),
+    gateError: document.getElementById('gate-error'),
+    catalog: document.getElementById('catalog'),
+    grid: document.getElementById('grid'),
+    empty: document.getElementById('empty'),
+    emptyAddBtn: document.getElementById('empty-add-btn'),
+    countLabel: document.getElementById('count-label'),
+    syncNote: document.getElementById('sync-note'),
+    lockBtn: document.getElementById('lock-btn'),
+    fab: document.getElementById('fab'),
+    overlay: document.getElementById('overlay'),
+    addForm: document.getElementById('add-form'),
+    fUrl: document.getElementById('f-url'),
+    fTitle: document.getElementById('f-title'),
+    fPhoto: document.getElementById('f-photo'),
+    fPreview: document.getElementById('f-preview'),
+    cancelBtn: document.getElementById('cancel-btn'),
+    submitBtn: document.getElementById('submit-btn'),
+    formError: document.getElementById('form-error')
+  };
+
+  // ---------- Gate ----------
+  if (sessionStorage.getItem('catalog_unlocked') === '1') {
+    unlock();
+  }
+
+  els.gateForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (els.gateInput.value === PASSCODE) {
+      sessionStorage.setItem('catalog_unlocked', '1');
+      unlock();
+    } else {
+      els.gateError.textContent = 'Неверный код доступа';
+      els.gateCard.classList.remove('shake');
+      void els.gateCard.offsetWidth;
+      els.gateCard.classList.add('shake');
+      els.gateInput.value = '';
+      els.gateInput.focus();
+    }
+  });
+
+  els.lockBtn.addEventListener('click', function () {
+    sessionStorage.removeItem('catalog_unlocked');
+    els.catalog.hidden = true;
+    els.gate.hidden = false;
+    els.gateInput.value = '';
+    els.gateInput.focus();
+  });
+
+  function unlock() {
+    els.gate.hidden = true;
+    els.catalog.hidden = false;
+    initStorage();
+  }
+
+  // ---------- Storage backends ----------
+  var backend = null; // 'cloud' | 'local'
+  var db = null, assetsApi = null;
+  var LOCAL_KEY = 'catalog_sites_v1';
+
+  async function initStorage() {
+    try {
+      if (window.claude && typeof window.claude.use === 'function') {
+        db = await window.claude.use('db');
+        assetsApi = await window.claude.use('assets');
+      }
+    } catch (err) {
+      db = null; assetsApi = null;
+    }
+
+    if (db) {
+      backend = 'cloud';
+      els.syncNote.hidden = true;
+      var col = db.collection('sites');
+      col.orderBy('createdAt', 'asc').onSnapshot(function (snap) {
+        var items = snap.docs.map(function (d) {
+          var data = d.data() || {};
+          return {
+            id: d.id,
+            url: data.url,
+            title: data.title,
+            photoUrl: data.photoId ? '/_blob/' + data.photoId : null,
+            photoId: data.photoId || null,
+            createdAt: data.createdAt || 0
+          };
+        });
+        render(items);
+      }, function () {
+        els.syncNote.hidden = false;
+        els.syncNote.textContent = 'Не удалось подключиться к хранилищу. Изменения могут не сохраниться.';
+      });
+    } else {
+      backend = 'local';
+      els.syncNote.hidden = false;
+      els.syncNote.textContent = 'Облачное хранилище недоступно в этом окне — записи сохраняются только в этом браузере.';
+      render(readLocal());
+      window.addEventListener('storage', function (e) {
+        if (e.key === LOCAL_KEY) render(readLocal());
+      });
+    }
+  }
+
+  function readLocal() {
+    try {
+      var raw = localStorage.getItem(LOCAL_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) { return []; }
+  }
+  function writeLocal(items) {
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(items));
+  }
+
+  async function addSite(url, title, file) {
+    var normalizedUrl = normalizeUrl(url);
+    var finalTitle = (title || '').trim() || hostnameOf(normalizedUrl);
+
+    if (backend === 'cloud') {
+      var photoId = null;
+      if (file && assetsApi) {
+        try {
+          var res = await assetsApi.upload(file);
+          photoId = res.id;
+        } catch (err) {
+          throw new Error('Не удалось загрузить фото. Попробуйте другой файл.');
+        }
+      }
+      await db.collection('sites').add({
+        url: normalizedUrl,
+        title: finalTitle,
+        photoId: photoId,
+        createdAt: Date.now()
+      });
+    } else {
+      var photoDataUrl = null;
+      if (file) {
+        try {
+          photoDataUrl = await compressImage(file);
+        } catch (err) {
+          photoDataUrl = null;
+        }
+      }
+      var items = readLocal();
+      items.push({
+        id: 'l' + Date.now() + Math.random().toString(36).slice(2, 7),
+        url: normalizedUrl,
+        title: finalTitle,
+        photoUrl: photoDataUrl,
+        createdAt: Date.now()
+      });
+      writeLocal(items);
+      render(items);
+    }
+  }
+
+  async function removeSite(item) {
+    if (backend === 'cloud') {
+      await db.doc('sites/' + item.id).delete();
+      if (item.photoId && assetsApi) {
+        assetsApi.delete(item.photoId).catch(function () {});
+      }
+    } else {
+      var items = readLocal().filter(function (x) { return x.id !== item.id; });
+      writeLocal(items);
+      render(items);
+    }
+  }
+
+  function normalizeUrl(raw) {
+    var v = raw.trim();
+    if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(v)) v = 'https://' + v;
+    return v;
+  }
+  function hostnameOf(url) {
+    try { return new URL(url).hostname.replace(/^www\./, ''); }
+    catch (e) { return url; }
+  }
+  function formatDate(ts) {
+    if (!ts) return '';
+    var d = new Date(ts);
+    var dd = String(d.getDate()).padStart(2, '0');
+    var mm = String(d.getMonth() + 1).padStart(2, '0');
+    return dd + '.' + mm + '.' + d.getFullYear();
+  }
+
+  function compressImage(file) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var img = new Image();
+        img.onload = function () {
+          var maxW = 640;
+          var scale = Math.min(1, maxW / img.width);
+          var w = Math.max(1, Math.round(img.width * scale));
+          var h = Math.max(1, Math.round(img.height * scale));
+          var canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', 0.78));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // ---------- Render ----------
+  var placeholderSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 6 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-6-3.8-9s1.3-6.3 3.8-9z"/></svg>';
+
+  function render(items) {
+    els.countLabel.textContent = 'Записей: ' + items.length;
+    els.grid.innerHTML = '';
+
+    if (!items.length) {
+      els.grid.hidden = true;
+      els.empty.hidden = false;
+      return;
+    }
+    els.grid.hidden = false;
+    els.empty.hidden = true;
+
+    items.forEach(function (item, i) {
+      var card = document.createElement('div');
+      card.className = 'card';
+
+      var photo = document.createElement('div');
+      photo.className = 'card-photo';
+      if (item.photoUrl) {
+        var img = document.createElement('img');
+        img.src = item.photoUrl;
+        img.alt = item.title || '';
+        photo.appendChild(img);
+      } else {
+        photo.innerHTML = placeholderSvg;
+      }
+      card.appendChild(photo);
+
+      var body = document.createElement('div');
+      body.className = 'card-body';
+
+      var meta = document.createElement('div');
+      meta.className = 'card-meta';
+      var acc = document.createElement('span');
+      acc.textContent = '№ ' + String(i + 1).padStart(3, '0');
+      var date = document.createElement('span');
+      date.textContent = formatDate(item.createdAt);
+      meta.appendChild(acc);
+      meta.appendChild(date);
+      body.appendChild(meta);
+
+      var title = document.createElement('h3');
+      title.className = 'card-title';
+      title.textContent = item.title || hostnameOf(item.url);
+      body.appendChild(title);
+
+      var link = document.createElement('a');
+      link.className = 'card-url';
+      link.href = item.url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = item.url.replace(/^https?:\/\//, '');
+      body.appendChild(link);
+
+      card.appendChild(body);
+
+      var del = document.createElement('button');
+      del.className = 'card-delete';
+      del.type = 'button';
+      del.setAttribute('aria-label', 'Удалить запись');
+      del.textContent = '×';
+      del.addEventListener('click', function () {
+        if (confirm('Удалить «' + (item.title || item.url) + '» из картотеки?')) {
+          removeSite(item);
+        }
+      });
+      card.appendChild(del);
+
+      els.grid.appendChild(card);
+    });
+  }
+
+  // ---------- Modal ----------
+  function openModal() {
+    els.addForm.reset();
+    els.formError.textContent = '';
+    els.fPreview.style.display = 'none';
+    els.overlay.hidden = false;
+    els.fUrl.focus();
+  }
+  function closeModal() {
+    els.overlay.hidden = true;
+  }
+
+  els.fab.addEventListener('click', openModal);
+  els.emptyAddBtn.addEventListener('click', openModal);
+  els.cancelBtn.addEventListener('click', closeModal);
+  els.overlay.addEventListener('click', function (e) {
+    if (e.target === els.overlay) closeModal();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !els.overlay.hidden) closeModal();
+  });
+
+  els.fPhoto.addEventListener('change', function () {
+    var file = els.fPhoto.files[0];
+    if (!file) { els.fPreview.style.display = 'none'; return; }
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      els.fPreview.src = e.target.result;
+      els.fPreview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  els.addForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var url = els.fUrl.value.trim();
+    if (!url) return;
+    els.formError.textContent = '';
+    els.submitBtn.disabled = true;
+    els.submitBtn.textContent = 'Добавляем…';
+    try {
+      await addSite(url, els.fTitle.value, els.fPhoto.files[0] || null);
+      closeModal();
+    } catch (err) {
+      els.formError.textContent = err.message || 'Не удалось добавить запись.';
+    } finally {
+      els.submitBtn.disabled = false;
+      els.submitBtn.textContent = 'Добавить в картотеку';
+    }
+  });
+})();
+</script>
