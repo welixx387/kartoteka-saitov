@@ -570,11 +570,23 @@
   }
 
   // ---------- Storage backends ----------
-  var backend = null; // 'cloud' | 'local'
+  var backend = null; // 'api' | 'cloud' | 'local'
   var db = null, assetsApi = null;
   var LOCAL_KEY = 'catalog_sites_v1';
 
   async function initStorage() {
+    try {
+      var probe = await fetch('/api/sites', { cache: 'no-store' });
+      if (probe.ok) {
+        backend = 'api';
+        els.syncNote.hidden = true;
+        await refreshFromApi();
+        return;
+      }
+    } catch (err) {
+      // no server API on this host (e.g. running as a Claude artifact) — fall through
+    }
+
     try {
       if (window.claude && typeof window.claude.use === 'function') {
         db = await window.claude.use('db');
@@ -608,11 +620,22 @@
     } else {
       backend = 'local';
       els.syncNote.hidden = false;
-      els.syncNote.textContent = 'Облачное хранилище недоступно в этом окне — записи сохраняются только в этом браузере.';
+      els.syncNote.textContent = 'Серверное хранилище недоступно — записи сохраняются только в этом браузере.';
       render(readLocal());
       window.addEventListener('storage', function (e) {
         if (e.key === LOCAL_KEY) render(readLocal());
       });
+    }
+  }
+
+  async function refreshFromApi() {
+    try {
+      var res = await fetch('/api/sites', { cache: 'no-store' });
+      var items = await res.json();
+      render(items);
+    } catch (err) {
+      els.syncNote.hidden = false;
+      els.syncNote.textContent = 'Не удалось загрузить каталог с сервера.';
     }
   }
 
@@ -629,6 +652,28 @@
   async function addSite(url, title, file) {
     var normalizedUrl = normalizeUrl(url);
     var finalTitle = (title || '').trim() || hostnameOf(normalizedUrl);
+
+    if (backend === 'api') {
+      var photoDataUrlApi = null;
+      if (file) {
+        try {
+          photoDataUrlApi = await compressImage(file);
+        } catch (err) {
+          photoDataUrlApi = null;
+        }
+      }
+      var apiRes = await fetch('/api/sites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: normalizedUrl, title: finalTitle, photoDataUrl: photoDataUrlApi })
+      });
+      if (!apiRes.ok) {
+        var errData = await apiRes.json().catch(function () { return {}; });
+        throw new Error(errData.error || 'Не удалось добавить запись.');
+      }
+      await refreshFromApi();
+      return;
+    }
 
     if (backend === 'cloud') {
       var photoId = null;
@@ -669,6 +714,12 @@
   }
 
   async function removeSite(item) {
+    if (backend === 'api') {
+      await fetch('/api/sites?id=' + encodeURIComponent(item.id), { method: 'DELETE' });
+      await refreshFromApi();
+      return;
+    }
+
     if (backend === 'cloud') {
       await db.doc('sites/' + item.id).delete();
       if (item.photoId && assetsApi) {

@@ -1,0 +1,9 @@
+{
+  "name": "kartoteka-saitov",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@vercel/blob": "^0.24.1"
+  }
+}
